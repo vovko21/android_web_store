@@ -2,6 +2,7 @@ package com.example.androidstore.network;
 
 import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.dto.ProductImageDTO;
+import com.example.androidstore.models.LoginModel;
 import com.example.androidstore.models.RegisterModel;
 
 import java.util.List;
@@ -33,4 +34,7 @@ public interface ProductApi {
 
     @POST("/api/Account/register")
     public Call<Integer> register(@Body RegisterModel registerModel);
+
+    @POST("/api/Account/login")
+    public Call<Integer> login(@Body LoginModel registerModel);
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class HomeApplication extends Application {
     private static HomeApplication instance;
     private static Context appContext;
+    private int userId;
 
     public static HomeApplication getInstance() {
         return instance;
@@ -26,8 +27,18 @@ public class HomeApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        //Log.d("Init app", "Get instance init application");
         this.setAppContext(getApplicationContext());
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    public boolean chechUser() {
+        if(userId == -1) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setUser (int userId) {
+        this.userId = userId;
     }
 }

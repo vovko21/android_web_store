@@ -4,23 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.androidstore.application.HomeApplication;
-import com.example.androidstore.dto.ProductDTO;
+import com.example.androidstore.models.LoginModel;
 import com.example.androidstore.models.RegisterModel;
 import com.example.androidstore.network.services.ProductService;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private int userId;
     HomeApplication application = HomeApplication.getInstance();
@@ -28,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
     }
 
     public void TryLoadActivity() {
@@ -38,10 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void OnClickButtonRegister(View view) {
-        //Check if we already logged in and doesn't need to register
-        TryLoadActivity();
-
+    public void OnClickButtonLogin(View view) {
         final TextInputEditText email = findViewById(R.id.textInputEmail);
 
         //Validate input by user fields
@@ -53,12 +47,12 @@ public class RegisterActivity extends AppCompatActivity {
             password.setError(null);
         }
 
-        RegisterModel registerModel = new RegisterModel(email.getText().toString(), password.getText().toString());
+        LoginModel loginModekl = new LoginModel(email.getText().toString(), password.getText().toString());
 
         //Throwing request - register
         ProductService.getInstance()
                 .getProductsApi()
-                .register(registerModel)
+                .login(loginModekl)
                 .enqueue(new Callback<Integer>() {
                     @Override
                     public void onResponse(Call<Integer> call, Response<Integer> response) {
@@ -71,11 +65,15 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
-        if (userId == -1) email.setError("That username already taken");
-        else {
+        if(userId > 0) {
             application.setUser(userId);
-        }
 
-        TryLoadActivity();
+            TryLoadActivity();
+        }
+    }
+
+    public void OnClickButtonGoRegister(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
