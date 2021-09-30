@@ -20,12 +20,14 @@ namespace Web.Store.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly EFAppContext _context;
 
-        public AccountController(UserManager<AppUser> userManager, EFAppContext context)
+        public AccountController(UserManager<AppUser> userManager, EFAppContext context, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _context = context;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -54,32 +56,19 @@ namespace Web.Store.Controllers
         {
             if (ModelState.IsValid)
             {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
                 AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (user != null)
+
+                if (result.Succeeded)
                 {
-                    await Authenticate(model.Email); //auth
-
                     return Ok(user.Id);
-
                 }
 
                 return BadRequest();
             }
 
             return BadRequest();
-        }
-
-        private async Task Authenticate(string userName)
-        {
-            // creating claim
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            // creating ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // setting up user
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
 }

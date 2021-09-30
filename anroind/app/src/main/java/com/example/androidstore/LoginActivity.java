@@ -19,7 +19,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private int userId;
+    private Integer userId;
     HomeApplication application = HomeApplication.getInstance();
 
     @Override
@@ -35,39 +35,63 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void OnClickButtonLogin(View view) {
-        final TextInputEditText email = findViewById(R.id.textInputEmail);
+    public boolean Validate(TextInputEditText email,
+                            TextInputLayout emailLayout,
+                            TextInputEditText password,
+                            TextInputLayout passwordLayout) {
+        boolean valid = true;
 
-        //Validate input by user fields
-        final TextInputLayout passwordLayout = findViewById(R.id.textFieldPassword);
-        final TextInputEditText password = findViewById(R.id.textInputPassword);
-        if (password.getText().toString().isEmpty()) {
-            passwordLayout.setError("Не вказали пароль");
+        if(email.getText().toString().isEmpty()) {
+            emailLayout.setError("Не вказали емайл");
+            valid = false;
         } else {
-            password.setError(null);
+            emailLayout.setError(null);
         }
 
-        LoginModel loginModekl = new LoginModel(email.getText().toString(), password.getText().toString());
+        if (password.getText().toString().isEmpty()) {
+            passwordLayout.setError("Не вказали пароль");
+            valid = false;
+        } else {
+            passwordLayout.setError(null);
+        }
 
-        //Throwing request - register
+        return valid;
+    }
+
+    public void OnClickButtonLogin(View view) {
+        final TextInputEditText email = findViewById(R.id.textInputEmail);
+        final TextInputLayout emailLayout = findViewById(R.id.textFieldEmail);
+        final TextInputLayout passwordLayout = findViewById(R.id.textFieldPassword);
+        final TextInputEditText password = findViewById(R.id.textInputPassword);
+
+        //Validate inputs filled by user
+        if(!Validate(email, emailLayout, password, passwordLayout)) return;
+
+        LoginModel loginModel = new LoginModel(email.getText().toString(), password.getText().toString());
+
+        //Throwing request - login
         ProductService.getInstance()
                 .getProductsApi()
-                .login(loginModekl)
+                .login(loginModel)
                 .enqueue(new Callback<Integer>() {
                     @Override
                     public void onResponse(Call<Integer> call, Response<Integer> response) {
-                        userId = response.body();
+                        if (!response.isSuccessful()) {
+                            emailLayout.setError("Введіть ваш емайл");
+                            userId = null;
+                        } else {
+                            userId = response.body();
+                            application.setUser(userId);
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Integer> call, Throwable t) {
-                        userId = -1;
+                        userId = null;
                     }
                 });
 
-        if(userId > 0) {
-            application.setUser(userId);
-
+        if(userId != null) {
             TryLoadActivity();
         }
     }

@@ -22,7 +22,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private int userId;
+    private Integer userId;
     HomeApplication application = HomeApplication.getInstance();
 
     @Override
@@ -38,20 +38,40 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    public boolean Validate(TextInputEditText email,
+                            TextInputLayout emailLayout,
+                            TextInputEditText password,
+                            TextInputLayout passwordLayout) {
+        boolean valid = true;
+
+        if(email.getText().toString().isEmpty()) {
+            emailLayout.setError("Не вказали емайл");
+            valid = false;
+        } else {
+            emailLayout.setError(null);
+        }
+
+        if (password.getText().toString().isEmpty()) {
+            passwordLayout.setError("Не вказали пароль");
+            valid = false;
+        } else {
+            passwordLayout.setError(null);
+        }
+
+        return valid;
+    }
+
     public void OnClickButtonRegister(View view) {
+        final TextInputEditText email = findViewById(R.id.textInputEmail);
+        final TextInputLayout emailLayout = findViewById(R.id.textFieldEmail);
+        final TextInputLayout passwordLayout = findViewById(R.id.textFieldPassword);
+        final TextInputEditText password = findViewById(R.id.textInputPassword);
+
         //Check if we already logged in and doesn't need to register
         TryLoadActivity();
 
-        final TextInputEditText email = findViewById(R.id.textInputEmail);
-
         //Validate input by user fields
-        final TextInputLayout passwordLayout = findViewById(R.id.textFieldPassword);
-        final TextInputEditText password = findViewById(R.id.textInputPassword);
-        if (password.getText().toString().isEmpty()) {
-            passwordLayout.setError("Не вказали пароль");
-        } else {
-            password.setError(null);
-        }
+        if(!Validate(email, emailLayout, password, passwordLayout)) return;
 
         RegisterModel registerModel = new RegisterModel(email.getText().toString(), password.getText().toString());
 
@@ -62,16 +82,24 @@ public class RegisterActivity extends AppCompatActivity {
                 .enqueue(new Callback<Integer>() {
                     @Override
                     public void onResponse(Call<Integer> call, Response<Integer> response) {
-                        userId = response.body();
+                        if (!response.isSuccessful()) {
+                            emailLayout.setError("Введіть ваш емайл");
+                            userId = null;
+                        } else {
+                            userId = response.body();
+                            application.setUser(userId);
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Integer> call, Throwable t) {
-                        userId = -1;
+                        userId = null;
                     }
                 });
 
-        if (userId == -1) email.setError("That username already taken");
+        if (userId == null) {
+            emailLayout.setError("That username already taken");
+        }
         else {
             application.setUser(userId);
         }

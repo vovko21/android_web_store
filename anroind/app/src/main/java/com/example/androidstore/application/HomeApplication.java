@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class HomeApplication extends Application {
     private static HomeApplication instance;
     private static Context appContext;
-    private int userId;
+    private Integer userId;
 
     public static HomeApplication getInstance() {
         return instance;
@@ -32,13 +32,13 @@ public class HomeApplication extends Application {
     }
 
     public boolean chechUser() {
-        if(userId == -1) {
+        if(userId == null) {
             return false;
         }
         return true;
     }
 
-    public void setUser (int userId) {
+    public void setUser (Integer userId) {
         this.userId = userId;
     }
 }
