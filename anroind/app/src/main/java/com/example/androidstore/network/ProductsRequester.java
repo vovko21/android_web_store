@@ -8,6 +8,7 @@ import com.example.androidstore.application.HomeApplication;
 import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.dto.ProductImageDTO;
 import com.example.androidstore.network.services.ProductService;
+import com.example.androidstore.utils.LoaderUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,12 @@ public class ProductsRequester {
                     @Override
                     public void onResponse(Call<List<ProductDTO>> call, Response<List<ProductDTO>> response) {
                         allProducts = response.body();
+                        LoaderUtils.hideLoading();
                     }
 
                     @Override
                     public void onFailure(Call<List<ProductDTO>> call, Throwable t) {
+                        LoaderUtils.hideLoading();
                     }
                 });
 

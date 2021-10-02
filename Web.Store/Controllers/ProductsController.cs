@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Web.Store.Data;
 using Web.Store.Models;
@@ -22,6 +23,7 @@ namespace Web.Store.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
+            Thread.Sleep(2000);
             var list = await _context.Products
                 .Select(x => new PrductItemVM
                 {

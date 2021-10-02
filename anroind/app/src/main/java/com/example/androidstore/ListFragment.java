@@ -20,6 +20,7 @@ import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.network.ImageRequester;
 import com.example.androidstore.network.ProductsRequester;
 import com.example.androidstore.network.services.ProductService;
+import com.example.androidstore.utils.LoaderUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,17 +39,9 @@ public class ListFragment extends Fragment {
         this.products = ProductsRequester.getInstance().getAllProducts();
     }
 
-    public ListFragment(List<ProductDTO> pr) {
-        products = pr;
-    }
-
-    public static ListFragment newInstance () {
-        ListFragment fragment = new ListFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LoaderUtils.showLoading(getContext());
         super.onCreate(savedInstanceState);
     }
 
