@@ -3,9 +3,12 @@ package com.example.androidstore.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ProductDTO implements Parcelable {
+import java.util.List;
+
+public class ProductDTO  {
     private String name;
     private double price;
+    private String image;
 
     public ProductDTO() { }
 
@@ -35,28 +38,7 @@ public class ProductDTO implements Parcelable {
         this.price = price;
     }
 
-    public static final Creator<ProductDTO> CREATOR = new Creator<ProductDTO>() {
-        @Override
-        public ProductDTO createFromParcel(Parcel source) {
-            String name = source.readString();
-            double price = source.readDouble();
-            return new ProductDTO(name, price);
-        }
-
-        @Override
-        public ProductDTO[] newArray(int size) {
-            return new ProductDTO[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeDouble(price);
+    public String getProductImage() {
+        return this.image;
     }
 }

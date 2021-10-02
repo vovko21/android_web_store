@@ -22,7 +22,17 @@ namespace Web.Store.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _context.Products.ToListAsync();
+            var list = await _context.Products
+                .Select(x => new PrductItemVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Price = x.Price,
+                    Image = x.ProductImages
+                        .Select(x => x.Name)
+                        .FirstOrDefault() ?? "empty.jpg"
+                })
+                .ToListAsync();
             return Ok(list);
         }
 
@@ -30,10 +40,10 @@ namespace Web.Store.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var list = await _context.ProductImages
-                .Select(x=>new ProductInfoVM 
+                .Select(x => new ProductInfoVM
                 {
-                    Id=x.Id,
-                    Path="/images/"+x.Name
+                    Id = x.Id,
+                    Path = "/images/" + x.Name
                 })
                 .ToListAsync();
             return Ok(list);
