@@ -18,6 +18,7 @@ import com.example.androidstore.application.adapter.ProductAdapter;
 import com.example.androidstore.constans.Urls;
 import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.network.ImageRequester;
+import com.example.androidstore.network.ProductsRequester;
 import com.example.androidstore.network.services.ProductService;
 
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public class ListFragment extends Fragment {
     private List<ProductDTO> products;
 
     public ListFragment() {
-        // Required empty public constructor
+        this.products = ProductsRequester.getInstance().getAllProducts();
     }
 
     public ListFragment(List<ProductDTO> pr) {

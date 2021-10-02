@@ -20,6 +20,7 @@ import com.example.androidstore.constans.Urls;
 import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.dto.ProductImageDTO;
 import com.example.androidstore.network.ImageRequester;
+import com.example.androidstore.network.ProductsRequester;
 import com.example.androidstore.network.services.ProductService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -64,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new MainFragment();
                             break;
                         case R.id.listFragment:
-//                            if(products == null) break;
-                            selectedFragment = new ListFragment(products);
+                            selectedFragment = new ListFragment();
                             break;
                         default:
                             selectedFragment = new MainFragment();
@@ -80,45 +80,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void LoadFromDB() {
-        //String url = Urls.BASE + "/images/manul.jpg";
-        //imageRequester = ImageRequester.getInstance();
-        //myImage = findViewById(R.id.myimg);
-        //imageRequester.setImageFromUrl(myImage, url);
-
-        //txtinfo = findViewById(R.id.txtinfo);
-
-        ProductService.getInstance()
-                .getProductsApi()
-                .all()
-                .enqueue(new Callback<List<ProductDTO>>() {
-                    @Override
-                    public void onResponse(Call<List<ProductDTO>> call, Response<List<ProductDTO>> response) {
-                        products = response.body();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<ProductDTO>> call, Throwable t) {
-                    }
-                });
-
-//        ProductService.getInstance()
-//                .getProductsApi()
-//                .getPostWithID(1)
-//                .enqueue(new Callback<List<ProductImageDTO>>() {
-//                    @Override
-//                    public void onResponse(Call<List<ProductImageDTO>> call, Response<List<ProductImageDTO>> response) {
-//                        List<ProductImageDTO> list = response.body();
-//                        String str = "";
-//                        for (ProductImageDTO item : list) {
-//                            str += item.getPath() + "\n";
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<ProductImageDTO>> call, Throwable t) {
-//
-//                }
-//        });
+//        this.products = ProductsRequester.getInstance().getAllProducts();
     }
 
 }

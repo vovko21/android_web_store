@@ -16,14 +16,10 @@ namespace Web.Store.Data
     {
         public EFAppContext(DbContextOptions<EFAppContext> options) :
             base(options)
-        {
-
-        }
+        {}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             builder.Entity<AppUserRole>(userRole =>
             {
                 userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -38,9 +34,30 @@ namespace Web.Store.Data
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
+
+            //var user = new AppUser
+            //{
+            //    Email = "user@gm.c",
+            //    NormalizedEmail = "USER@GM.C",
+            //    UserName = "Owner",
+            //    NormalizedUserName = "OWNER",
+            //    PhoneNumber = "+111111111111",
+            //    EmailConfirmed = true,
+            //    PhoneNumberConfirmed = true,
+            //    SecurityStamp = Guid.NewGuid().ToString("D")
+            //};
+
+            //var password = new PasswordHasher<AppUser>();
+            //var hashed = password.HashPassword(user, "secret");
+            //user.PasswordHash = hashed;
+
+            //builder.Entity<AppUser>().HasData(new[] { user });
+
+            base.OnModelCreating(builder);
         }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<UserImage> UserImages { get; set; }
     }
 }

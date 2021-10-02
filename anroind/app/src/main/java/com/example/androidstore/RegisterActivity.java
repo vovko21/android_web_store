@@ -1,19 +1,29 @@
 package com.example.androidstore;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.androidstore.application.HomeApplication;
+import com.example.androidstore.application.helpers.ImageDownloader;
 import com.example.androidstore.dto.ProductDTO;
 import com.example.androidstore.models.RegisterModel;
 import com.example.androidstore.network.services.ProductService;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import retrofit2.Call;
@@ -105,5 +115,38 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         TryLoadActivity();
+    }
+
+    public void onClickLoadImage(View view) {
+        Intent picker = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(picker, 3);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            ImageView imageView = findViewById(R.id.imageView);
+
+            Bitmap bitmap = getBitmapFromURL(selectedImage.getPath());
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public Bitmap getBitmapFromURL(String src) {
+        try {
+            java.net.URL url = new java.net.URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

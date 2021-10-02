@@ -9,5 +9,6 @@ namespace Web.Store.Data.Entities.Identity
     public class AppUser : IdentityUser<long>
     {
         public virtual ICollection<AppUserRole> UserRoles { get; set; }
+        public virtual ICollection<UserImage> UserImages { get; set; }
     }
 }
