@@ -8,10 +8,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -40,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Loading all necessary data from Database;
-        LoadFromDB();
 
         //Event listener on changing fragment
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
@@ -79,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
             }
     };
 
-    private void LoadFromDB() {
-//        this.products = ProductsRequester.getInstance().getAllProducts();
+    public void OnClickButtonAddProduct(View view) {
+        Intent intent = new Intent(this, AddProductActivity.class);
+        startActivity(intent);
     }
-
 }

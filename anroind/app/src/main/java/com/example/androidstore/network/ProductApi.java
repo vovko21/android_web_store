@@ -37,4 +37,7 @@ public interface ProductApi {
 
     @POST("/api/Account/login")
     public Call<Integer> login(@Body LoginModel registerModel);
+
+    @POST("/api/Products/add")
+    public Call<ProductDTO> addProduct(@Body ProductDTO productModel);
 }

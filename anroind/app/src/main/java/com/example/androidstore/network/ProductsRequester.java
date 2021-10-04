@@ -58,6 +58,23 @@ public class ProductsRequester {
         return allProducts;
     }
 
+    public void addProduct(ProductDTO product) {
+        ProductService.getInstance()
+                .getProductsApi()
+                .addProduct(product)
+                .enqueue(new Callback<ProductDTO>() {
+                    @Override
+                    public void onResponse(Call<ProductDTO> call, Response<ProductDTO> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductDTO> call, Throwable t) {
+
+                    }
+                });
+    }
+
     public void getImages(){
         ProductService.getInstance()
                 .getProductsApi()

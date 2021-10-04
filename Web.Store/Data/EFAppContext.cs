@@ -48,7 +48,7 @@ namespace Web.Store.Data
             //};
 
             //var password = new PasswordHasher<AppUser>();
-            //var hashed = password.HashPassword(user, "secret");
+            //var hashed = password.HashPassword(user, "12345678");
             //user.PasswordHash = hashed;
 
             //builder.Entity<AppUser>().HasData(new[] { user });

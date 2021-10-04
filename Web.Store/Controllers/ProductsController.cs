@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Web.Store.Data;
+using Web.Store.Data.Entities;
 using Web.Store.Models;
 
 namespace Web.Store.Controllers
@@ -23,7 +24,6 @@ namespace Web.Store.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            Thread.Sleep(2000);
             var list = await _context.Products
                 .Select(x => new PrductItemVM
                 {
@@ -36,6 +36,21 @@ namespace Web.Store.Controllers
                 })
                 .ToListAsync();
             return Ok(list);
+        }
+
+        [HttpPost("add")]
+        public IActionResult CreateProduct([FromBody] PrductItemVM product)
+        {
+            if (product.Name != null && product.Price.HasValue)
+            {
+                var newID = _context.Products.OrderByDescending(x => x.Id).FirstOrDefault();
+                Product productDB = new Product { Id = newID.Id + 1, Name = product.Name, Price = product.Price.Value };
+                _context.Add(productDB);
+                _context.SaveChanges();
+                return Ok(productDB);
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("get/{id}")]
