@@ -12,17 +12,30 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:layout_gravity="center_vertical"
-        tools:context=".LoginActivity">
+        tools:context=".AddProductActivity">
+
+        <com.oginotihiro.cropview.CropView
+            android:id="@+id/cropView"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Створення товару"
+            android:text="Додати продукт"
             android:textSize="28dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/cropView" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textFieldName"
@@ -77,6 +90,17 @@
             app:layout_constraintStart_toStartOf="parent"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             app:layout_constraintTop_toBottomOf="@+id/button_create" />
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="openSomeActivityForResult"
+            android:text="Обрати фото"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

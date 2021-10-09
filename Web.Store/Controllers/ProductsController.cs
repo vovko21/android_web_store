@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Web.Store.Data;
 using Web.Store.Data.Entities;
 using Web.Store.Models;
+using Web.Store.Utils;
 
 namespace Web.Store.Controllers
 {
@@ -41,10 +43,41 @@ namespace Web.Store.Controllers
         [HttpPost("add")]
         public IActionResult CreateProduct([FromBody] PrductItemVM product)
         {
+            if(product.Name != null && product.Price.HasValue && product.Image != null)
+            {
+                string imageName = ImageLoader.LoadBase64(product.Image); 
+
+                var newID = _context.Products.OrderByDescending(x => x.Id).FirstOrDefault();
+                var newIDImage = _context.ProductImages.OrderByDescending(x => x.Id).FirstOrDefault();
+                Product productDB = new Product
+                {
+                    Id = newID.Id + 1,
+                    Name = product.Name,
+                    Price = product.Price.Value,
+                    ProductImages = new List<ProductImage>() {
+                        new ProductImage () {
+                            Id = newIDImage.Id + 1,
+                            Name = imageName,
+                            Priority = 1
+                        }
+                    }
+                };
+
+                _context.Add(productDB);
+                _context.SaveChanges();
+                return Ok(productDB);
+            }
+
             if (product.Name != null && product.Price.HasValue)
             {
                 var newID = _context.Products.OrderByDescending(x => x.Id).FirstOrDefault();
-                Product productDB = new Product { Id = newID.Id + 1, Name = product.Name, Price = product.Price.Value };
+                Product productDB = new Product 
+                {
+                    Id = newID.Id + 1,
+                    Name = product.Name,
+                    Price = product.Price.Value
+                };
+
                 _context.Add(productDB);
                 _context.SaveChanges();
                 return Ok(productDB);
@@ -52,6 +85,7 @@ namespace Web.Store.Controllers
 
             return BadRequest();
         }
+        
 
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)

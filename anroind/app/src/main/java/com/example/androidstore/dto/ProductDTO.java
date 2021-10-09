@@ -17,6 +17,12 @@ public class ProductDTO  {
         this.price = price;
     }
 
+    public ProductDTO(String name, double price, String image) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+    }
+
     protected ProductDTO(Parcel in) {
         name = in.readString();
         price = in.readDouble();
